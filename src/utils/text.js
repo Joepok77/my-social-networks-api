@@ -1,10 +1,13 @@
 const { FilterXSS } = require('xss');
 
-// Aucune balise autorisée : les balises sont retirées, le contenu des <script> et <style> aussi.
+// Aucune balise autorisée :
+// - une vraie balise (<b>, </a>, <img ...>) est retirée, ainsi que le contenu des <script> et <style> ;
+// - un chevron isolé (« prix < 10 ») n'est pas une balise : il est encodé (&lt;), sans perte de texte.
+// Le résultat ne contient donc jamais de chevron brut.
 const filter = new FilterXSS({
   whiteList: {},
-  stripIgnoreTag: true,
   stripIgnoreTagBody: ['script', 'style'],
+  onIgnoreTag: (tag, html) => (/^<[a-zA-Z/!?]/.test(html) ? '' : undefined),
 });
 
 const sanitizeText = (value) => filter.process(value);
