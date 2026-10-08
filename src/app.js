@@ -1,7 +1,9 @@
 const express = require('express');
 const helmet = require('helmet');
+const swaggerUi = require('swagger-ui-express');
 
 const env = require('./config/env');
+const openapi = require('./docs/openapi');
 const accessLogger = require('./middlewares/logger');
 const corsMiddleware = require('./middlewares/cors');
 const rejectMongoOperators = require('./middlewares/sanitize');
@@ -29,6 +31,9 @@ app.use(corsMiddleware);
 app.use('/api', globalLimiter);
 app.use(express.json({ limit: '100kb' }));
 app.use(rejectMongoOperators);
+
+// Documentation de l'API (Swagger UI)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapi, { customSiteTitle: 'My Social Networks API' }));
 
 app.use('/api', require('./routes/auth.routes'));
 app.use('/api', require('./routes/users.routes'));
