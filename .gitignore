@@ -1,0 +1,15 @@
+# Dépendances
+node_modules/
+
+# Secrets et configuration locale
+.env
+
+# Certificats TLS générés en local
+certs/
+
+# Supports de cours et sujet du TP
+ressources/
+
+# Journaux d'accès
+logs/
+*.log
